@@ -1,17 +1,28 @@
 import Header from './header';
+import React ,{ useState ,useEffect} from 'react'
 import './App.css';
-import Home from './home';
-import Cart from './cart';
+import Home from './Home';
+import Cart from './Cart';
 import { BrowserRouter as Router,Switch,Route,Link} from 'react-router-dom';
+import {db} from './firebase';
 
 function App() {
+  const [cartItems, setCartItems] = useState([]);
+  const getCartItems = ()=>{
+      db.collection('cart-details').onSnapshot((snapshot)=>{
+        
+      })
+  }
+  useEffect(() => {
+    getCartItems()
+  }, [])
   return (
     <Router>
       <div className="App">
         <Header/>
         <Switch>
          
-          <Route path="/cart">
+          <Route path="/Cart">
             <Cart/>
           </Route>
           <Route path="/">

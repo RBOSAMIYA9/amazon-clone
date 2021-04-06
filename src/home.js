@@ -1,10 +1,33 @@
-import React from 'react'
+import React ,{ useState ,useEffect} from 'react'
 import styled from 'styled-components'
 import Product from './product'
 import Footer from './footer'
-
+import {db} from './firebase'
 import Carousel from 'react-elastic-carousel';
-export default function home() {
+
+
+export default function Home() {
+    const [products, setProducts] = useState([]);
+
+    
+    const getProducts = () =>{
+        db.collection('product-details').onSnapshot((snapshot)=>{
+            let tempProducts = [];
+            tempProducts = snapshot.docs.map((doc)=>({
+                id:doc.id,
+                product:doc.data()
+            }));
+            // console.log(tempProducts);
+            setProducts(tempProducts);
+        })
+
+    }
+    useEffect(() => {
+        getProducts();
+    }, [])
+    
+    console.log("products :",products);
+
     return (
         <Container>
             <Banner>
@@ -17,14 +40,17 @@ export default function home() {
                     <ProductSliderContainer>
                     
                     <Carousel itemsToShow={4} disableArrowsOnEnd={false} itemPadding={[10,10,10,10]} pagination={false}>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
+                        {
+                            products.map((data) => (
+                                <Product
+                                    name={data.product.name}
+                                    price={data.product.price}
+                                    ratings={data.product.ratings}
+                                    image={data.product.image}
+                                    id={data.id}
+                                />
+                            ))
+                        }
                     </Carousel>
                     </ProductSliderContainer>
                 </ProductSlider>
@@ -34,18 +60,20 @@ export default function home() {
 
                 </InfoBanner>
                 <RecommmendedProducts>
-                <h3>Recommmended Products</h3>
+                <h3>Recommended Products</h3>
                     <hr></hr>
 
                     <Carousel itemsToShow={4} disableArrowsOnEnd={false} itemPadding={[10,10,10,10]} pagination={false}>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
-                        <Product/>
+                        {
+                            products.map((data) => (
+                                <Product
+                                    title={data.product.name}
+                                    price={data.product.price}
+                                    ratings={data.product.ratings}
+                                    image={data.product.image}
+                                />
+                            ))
+                        }
                     </Carousel>
                 </RecommmendedProducts>
             </Content>

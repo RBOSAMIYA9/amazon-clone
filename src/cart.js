@@ -1,9 +1,32 @@
-import React from 'react'
+import React ,{ useState ,useEffect} from 'react'
 import styled from 'styled-components'
 import Footer from './footer'
 import CartProducts from './cartProducts'
+import {db} from './firebase'
 
-function cart() {
+function Cart() {
+    const [cartItems, setCartItems] = useState([]);
+    
+    const getCartItems = () =>{
+        db.collection('cart-details').onSnapshot((snapshot)=>{
+            let tempProducts = [];
+            tempProducts = snapshot.docs.map((doc)=>({
+                id:doc.id,
+                product:doc.data()
+            }));
+            console.log(tempProducts);
+            setCartItems(tempProducts);
+            ;
+        })
+
+    }
+    useEffect(() => {
+        getCartItems();
+    }, [])
+    
+    // console.log("products :",products);
+
+
     return (
         <Container>
             <CartInfoContainer>
@@ -17,14 +40,26 @@ function cart() {
              </h2>
              <h3>Price</h3>
              <hr></hr>
+             {
+                        cartItems.map((data) => (
+                            
+                                <CartProducts
+                                    id={data.id}
+                                    name={data.product.name}
+                                    price={data.product.price}
+                                    image={data.product.image}
+                                    quantity={data.product.quantity}
+                                />
+                            ))
+            }
+            {/* <CartProducts/> */}
+            {/* <CartProducts/>
             <CartProducts/>
-            <CartProducts/>
-            <CartProducts/>
-            <CartProducts/>
-            <h3>Subtotal (1 item):   24,999.00</h3>
+            <CartProducts/> */}
+            <h3>Subtotal ( 2 items):   24,999.00</h3>
            </ShoppingCart>
             <Subtotal>
-                <h4>Subtotal(1 item):   ₹24,999.00 </h4>
+                <h4>Subtotal(2 items):   ₹24,999.00 </h4>
                 <button>Proceed to Buy</button>
             </Subtotal>
             </CartInfoContainer>
@@ -34,7 +69,7 @@ function cart() {
     )
 }
 
-export default cart
+export default Cart
 const Container = styled.div`
     
 `
