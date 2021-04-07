@@ -10,7 +10,13 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const getCartItems = ()=>{
       db.collection('cart-details').onSnapshot((snapshot)=>{
-        
+        let tempProducts = [];
+            tempProducts = snapshot.docs.map((doc)=>({
+                id:doc.id,
+                product:doc.data()
+            }));
+            // console.log(tempProducts);
+            setCartItems(tempProducts);
       })
   }
   useEffect(() => {
@@ -19,11 +25,11 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Header/>
+        <Header cartItems = {cartItems}/>
         <Switch>
          
           <Route path="/Cart">
-            <Cart/>
+            <Cart cartItems = {cartItems}/>
           </Route>
           <Route path="/">
             <Home/>

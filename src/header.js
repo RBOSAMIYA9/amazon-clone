@@ -4,7 +4,22 @@ import 'font-awesome/css/font-awesome.min.css';
 import {Link} from 'react-router-dom';
 
 const publicUrl = process.env.PUBLIC_URL;
-function header() {
+function header(cartItems) {
+    const getCount = () => {
+        let count = 0;
+        // Loop through all cart items
+
+        // console.log("cartItems getCount",cartItems.cartItems);
+        cartItems.cartItems.forEach((item) => {
+            // add the quantity of the cart item to tota;
+            count += item.product.quantity;
+            console.log("quantity ",item.product.quantity);
+        })
+       
+
+        return count;
+    }
+   
     return (
         <Container>
             <HeaderLogo>
@@ -59,7 +74,7 @@ function header() {
                     <Cart>
                         <i className="fa fa-shopping-cart fa-2x"></i>
                         <div>
-                            <p>5</p>
+                            <p>{getCount()}</p>
                             <span>Cart</span>
                         </div>
                         

@@ -6,7 +6,28 @@ import {db} from './firebase'
 
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
+    const getCount = () => {
+            let count = 0;
+            // Loop through all cart item
+            // console.log("cartItems",cartItems);
+            cartItems.forEach((item) => {
+                // add the quantity of the cart item to tota;
+                count += item.product.quantity;
+            })
     
+            return count;
+    }
+    const getCartTotal = () => {
+        let total = 0;
+        // Loop through all cart item
+        // console.log("cartItems",cartItems);
+        cartItems.forEach((item) => {
+            // add the quantity of the cart item to tota;
+            total = total + (item.product.price * item.product.quantity);
+        })
+
+        return total;
+}
     const getCartItems = () =>{
         db.collection('cart-details').onSnapshot((snapshot)=>{
             let tempProducts = [];
@@ -16,7 +37,7 @@ function Cart() {
             }));
             console.log(tempProducts);
             setCartItems(tempProducts);
-            ;
+            
         })
 
     }
@@ -56,10 +77,10 @@ function Cart() {
             {/* <CartProducts/>
             <CartProducts/>
             <CartProducts/> */}
-            <h3>Subtotal ( 2 items):   24,999.00</h3>
+            <h3>Subtotal ( {getCount()} items):    ₹{getCartTotal()}</h3>
            </ShoppingCart>
             <Subtotal>
-                <h4>Subtotal(2 items):   ₹24,999.00 </h4>
+                <h4>Subtotal({getCount()} items):   ₹{getCartTotal()} </h4>
                 <button>Proceed to Buy</button>
             </Subtotal>
             </CartInfoContainer>
