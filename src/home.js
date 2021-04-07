@@ -67,7 +67,7 @@ export default function Home() {
                         {
                             products.map((data) => (
                                 <Product
-                                    title={data.product.name}
+                                    name={data.product.name}
                                     price={data.product.price}
                                     ratings={data.product.ratings}
                                     image={data.product.image}
